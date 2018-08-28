@@ -1,0 +1,49 @@
+<table>
+  <tr>
+    <th>#</th>
+    <th>Name</th>
+    <th>Pipeline</th>
+    <th>Not Assigned</th>
+    <th>Assigned</th>
+    <th>Longest Waiting Time</th>
+    <th>Next Deadline</th>
+    <th>Sorting</th>
+    <th>Editors</th>
+    <th>Potential</th>
+    <th>Forced</th>
+    <th>Idle</th>
+    <th>&lt;0h</th>
+    <th>&lt;2h</th>
+    <th>&lt;4h</th>
+    <th>&lt;8h</th>
+    <th>&lt;12h</th>
+    <th>&lt;16h</th>
+    <th>&lt;24h</th>
+    <th>&lt;48h</th>
+    <th>&lt;72h</th>
+  </tr>
+  <tr *ngFor="let skill of skills, index as i">
+    <td>{{i}}</td>
+    <td>{{skill.name}}</td>
+    <td>{{skill.pipeline}}</td>
+    <td>{{skill.notAssigned}}</td>
+    <td>{{skill.assigned}}</td>
+    <td>{{skill.longestWaitingTime}}</td>
+    <td>{{skill.nextDeadline}}</td>
+    <td>{{skill.sorting}}</td>
+    <td>{{skill.editors}}</td>
+    <td>{{skill.potential}}</td>
+    <td>{{skill.forced}}</td>
+    <td>{{skill.idle}}</td>
+    <td>{{skill.freelancer}}</td>
+    <td>{{skill.zeroHours}}</td>
+    <td>{{skill.twoHours}}</td>
+    <td>{{skill.fourHours}}</td>
+    <td>{{skill.eightHours}}</td>
+    <td>{{skill.twelveHours}}</td>
+    <td>{{skill.sixteenHours}}</td>
+    <td>{{skill.twentyFourHours}}</td>
+    <td>{{skill.fourtyEightHours}}</td>
+    <td>{{skill.seventyTwoHours}}</td>
+  </tr>
+</table>
