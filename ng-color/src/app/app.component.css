@@ -5,3 +5,10 @@
   color: rgb(103, 106, 108);
   margin-left:8px;
 }
+
+.subtitle {
+  font-family: 'open sans', 'Helvetica Neue';
+  font-size: 17pt;
+  color: rgba(103, 106, 108, 0.7);
+  font-weight: 100;
+}
