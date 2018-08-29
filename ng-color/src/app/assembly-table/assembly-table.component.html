@@ -1,4 +1,34 @@
 <div class="table-card">
+  <div class="cp-container">
+    <div class="cp-container__box">
+      <div class="row">
+        <div class="col-sm-6">
+          <table class="cp-container__table">
+            <tr>
+              <td style="text-align:right">Bottleneck on:&nbsp;&nbsp;</td>
+              <td>
+                <ng-template ngFor let-b [ngForOf]="previousGeneratedBottleNeck" let-i="index">
+                  <div>{{b}}</div>
+                </ng-template>
+              </td>
+            </tr>
+            <tr>
+                <td>Generate bottleneck on:&nbsp;&nbsp;</td>
+                <td>
+                  <select (change)="genNewBottleneck($event.target.value)">
+                    <option default disabled>Select skill</option>
+                    <ng-template ngFor let-skill [ngForOf]="skills" let-i="index">
+                      <option value="{{skill.name}}">{{skill.name}}</option>
+                  </ng-template>
+                </select></td>
+              </tr>
+          </table>
+        </div>
+        <div class="col-sm-6"></div>
+      </div> <!--/row-->
+    </div> <!--/cp-container__box-->
+  </div> <!--/cp-container-->
+
   <table class="table table-striped table-hover">
     <tr>
       <th>#</th>

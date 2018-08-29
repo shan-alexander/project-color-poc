@@ -7,8 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./assembly-table.component.css']
 })
 export class AssemblyTableComponent implements OnInit {
+  previousGeneratedBottleNeck: Array<string> = [];
+  selectedSkill;
+
   zeSkills = this.generateRandomScenario(this._skills.skills);
   skills = this.generateRandomEditorDeficiencyBottleneck(this.zeSkills);
+
 
   constructor( private _skills: SkillsService ) { }
   ngOnInit() {
@@ -64,10 +68,22 @@ export class AssemblyTableComponent implements OnInit {
     return skillsArr;
   }
 
-  generateRandomEditorDeficiencyBottleneck(skillsArr) {
-    const rando = Math.floor(Math.random() * skillsArr.length);
-    const randoSkill = skillsArr[rando];
+  generateRandomEditorDeficiencyBottleneck(skillsArr, selectedSkill?) {
+    let randoSkill;
+    if (!selectedSkill) {
+      const rando = Math.floor(Math.random() * skillsArr.length);
+      randoSkill = skillsArr[rando];
+    } else {
+      for (let i = 0; i < skillsArr.length; i++) {
+        if (skillsArr[i].name === selectedSkill) {
+          randoSkill = skillsArr[i];
+          break;
+        }
+      }
+    }
     console.log('Bottleneck generated on ' + randoSkill.name);
+    this.setPreviousGeneratedBottleNeck(randoSkill.name);
+
     randoSkill.editors = Math.round(Math.random() * 10);
     randoSkill.assigned = Math.round(randoSkill.editors * (1.2 + Math.random()) );
 
@@ -91,6 +107,15 @@ export class AssemblyTableComponent implements OnInit {
     randoSkill.notAssigned = randoSkill.eightHours - randoSkill.assigned;
     randoSkill.pipeline = randoSkill.seventyTwoHours - randoSkill.assigned;
     return skillsArr;
+  }
+
+  setPreviousGeneratedBottleNeck(skillname) {
+    this.previousGeneratedBottleNeck.push(skillname);
+  }
+
+  genNewBottleneck(name) {
+    console.log(name);
+    this.generateRandomEditorDeficiencyBottleneck(this.skills, name);
   }
 
   // if editors and potential == 0, then potential is red
