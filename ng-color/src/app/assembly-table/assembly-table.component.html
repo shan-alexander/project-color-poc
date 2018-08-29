@@ -62,13 +62,13 @@
       <td>{{skill.assigned | number: '1.0-0'}}</td>
       <td><a href="#">{{skill.longestWaitingTime}}</a></td>
       <td><a href="#">{{skill.nextDeadline}}</a></td>
-      <td><a href="#">{{skill.sorting}}</a></td>
+      <td><a href="#" [ngStyle]="{'color': ui_sortIsRed(skill.sorting) ? 'red' : '337ab7'}">{{skill.sorting}}</a></td>
       <td><a href="#">{{skill.editors | number: '1.0-0'}}</a></td>
       <td><a href="#">{{skill.potential | number: '1.0-0'}}</a></td>
       <td><a href="#">{{skill.forced | number: '1.0-0'}}</a></td>
       <td>{{skill.idle | number: '1.0-0'}}</td>
       <td>{{skill.freelancer | number: '1.0-0'}}</td>
-      <td>{{skill.zeroHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'zeroHours')}">{{skill.zeroHours | number: '1.0-0'}}</td>
       <td>{{skill.twoHours | number: '1.0-0'}}</td>
       <td>{{skill.fourHours | number: '1.0-0'}}</td>
       <td>{{skill.eightHours | number: '1.0-0'}}</td>

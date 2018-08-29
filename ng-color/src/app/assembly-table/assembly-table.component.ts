@@ -64,7 +64,9 @@ export class AssemblyTableComponent implements OnInit {
         currentSkill.twentyFourHours : (currentSkill.twentyFourHours + (Math.round(Math.random() * 1000)));
       currentSkill.seventyTwoHours = (Math.random() * 100 > 20) ?
         currentSkill.fourtyEightHours : (currentSkill.fourtyEightHours + (Math.round(Math.random() * 555)));
-    }
+      currentSkill.timeInFutureSteps = 123 * Math.round(Math.random() * 10);
+      }
+    console.log('Skills array: ', skillsArr);
     return skillsArr;
   }
 
@@ -94,7 +96,7 @@ export class AssemblyTableComponent implements OnInit {
       (mm < 10) ? mm = '0' + mm : mm = '' + mm;
 
     randoSkill.nextDeadline = '' + hh + ':' + mm;
-    randoSkill.sorting = '-01:' + mm;
+    randoSkill.sorting = '-01:' + ((mm < 50) ? (mm + 8) : (mm - 17));
     randoSkill.zeroHours = Math.round(Math.random() * 300);
     randoSkill.twoHours = Math.round(Math.random() * 300);
     randoSkill.fourHours = randoSkill.twoHours + Math.round(Math.random() * 300);
@@ -106,6 +108,7 @@ export class AssemblyTableComponent implements OnInit {
     randoSkill.seventyTwoHours = randoSkill.sixteenHours + Math.round(Math.random() * 333);
     randoSkill.notAssigned = randoSkill.eightHours - randoSkill.assigned;
     randoSkill.pipeline = randoSkill.seventyTwoHours - randoSkill.assigned;
+    console.log(randoSkill);
     return skillsArr;
   }
 
@@ -118,8 +121,50 @@ export class AssemblyTableComponent implements OnInit {
     this.generateRandomEditorDeficiencyBottleneck(this.skills, name);
   }
 
+  ui_sortIsRed(sortingString) {
+    if (sortingString[0] === '-') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  ui_getBottleneckColor(skill, whichCol) {
+    // code here
+    const val = skill[whichCol];
+    const timeNeededForOnePe = val * (1 + skill.avgRej) + skill.avgIpt;
+    const timeNeededForStep = timeNeededForOnePe / skill.editors;
+    // first, check to see if timeNeededForStep
+
+  }
+
+  convertTimeStringToSeconds(timeStrin) {
+
+  }
+
+  simulateHoursImageTemplates(skillsArr) {
+    for (const skill of skillsArr) {
+      skill.zeroHoursTemplate = skill.templates[(Math.floor(Math.random() * skill.templates.length))];
+      let timeInFutureSteps = 0;
+      const indexOfSkill = skill.zeroHoursTemplate.indexOf(skill.name);
+      for (let i = (indexOfSkill + 1); i < skill.zeroHoursTemplate.length; i++) {
+        const futureStep = skill.zeroHoursTemplate[i];
+        const futureStepIpt = (skillsArr.find(obj => obj.name === skill.name)).avgIpt;
+        timeInFutureSteps = timeInFutureSteps + futureStepIpt;
+      }
+      skill.zeroHoursTimeInFutureSteps = timeInFutureSteps;
+    }
+    console.log(skillsArr[0].zeroHoursTimeInFutureSteps);
+  }
+
   // if editors and potential == 0, then potential is red
 
+  highlightRowYellow(skillsArr) {
+    for (let i = 0; i < skillsArr.length; i++) {
+      const currentSkill = skillsArr[i];
+      let val = currentSkill.zeroHours * (1 + currentSkill.avgRej) * currentSkill.avgIpt / currentSkill.editors;
+      val = val * 2; // remove this line
+    }
+  }
 
 
 }
