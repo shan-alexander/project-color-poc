@@ -38,7 +38,10 @@ export class AssemblyTableComponent implements OnInit {
       const sortingArraySplit = currentSkill.nextDeadline.split(':');
       hh = parseInt(sortingArraySplit[0], 10) - Math.round(parseInt(sortingArraySplit[0], 10) * Math.random());
       (hh < 10) ? hh = '0' + hh : hh = '' + hh;
-      currentSkill.sorting = '' + hh + ':' + Math.round(Math.random() * 60);
+
+      mm = parseInt(sortingArraySplit[0], 10) - Math.round(parseInt(sortingArraySplit[0], 10) * Math.random());
+      (mm < 10) ? mm = '0' + mm : mm = '' + mm;
+      currentSkill.sorting = '' + hh + ':' + mm;
 
       currentSkill.editors = Math.round(Math.random() * 40);
 
@@ -47,7 +50,7 @@ export class AssemblyTableComponent implements OnInit {
       currentSkill.forced = (Math.round(Math.random() * 100) > 5) ? 0 : Math.round(Math.random() * 10);
       currentSkill.idle = (Math.round(Math.random() * 100) > 10) ? 0 : Math.round(Math.random() * 10);
       // hours randomizing below
-      currentSkill.zeroHours = ((Math.random() * 100 > 10) ? 0 : Math.round(Math.random() * 50));
+      // currentSkill.zeroHours = ((Math.random() * 100 > 10) ? 0 : Math.round(Math.random() * 50));
       currentSkill.twoHours = (Math.random() * 100 > 10) ?
         currentSkill.zeroHours : (currentSkill.zeroHours + (Math.round(Math.random() * 30)));
       currentSkill.fourHours = (Math.random() * 100 > 10) ?
@@ -96,9 +99,10 @@ export class AssemblyTableComponent implements OnInit {
       (mm < 10) ? mm = '0' + mm : mm = '' + mm;
 
     randoSkill.nextDeadline = '' + hh + ':' + mm;
-    randoSkill.sorting = '-01:' + ((mm < 50) ? (mm + 8) : (mm - 17));
-    randoSkill.zeroHours = Math.round(Math.random() * 300);
-    randoSkill.twoHours = Math.round(Math.random() * 300);
+    randoSkill.sorting = '-0' + (Math.round(Math.random() * 3)) + ':' + ( (mm > 10 && mm < 50) ?
+      parseInt(mm, 10) + Math.round(Math.random() * 10) : mm);
+    randoSkill.zeroHours = Math.round(Math.random() * 500);
+    randoSkill.twoHours = randoSkill.zeroHours + Math.round(Math.random() * 300);
     randoSkill.fourHours = randoSkill.twoHours + Math.round(Math.random() * 300);
     randoSkill.eightHours = randoSkill.fourHours;
     randoSkill.twelveHours = randoSkill.eightHours;
@@ -129,16 +133,44 @@ export class AssemblyTableComponent implements OnInit {
     }
   }
   ui_getBottleneckColor(skill, whichCol) {
-    // code here
+    if (skill.name === 'Gender Detection') { console.log('Running bottleneck checker for ' + skill.name)}
     const val = skill[whichCol];
-    const timeNeededForOnePe = val * (1 + skill.avgRej) + skill.avgIpt;
+    const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt;
     const timeNeededForStep = timeNeededForOnePe / skill.editors;
     // first, check to see if timeNeededForStep
+    const nextDeadlineSecs = this.convertTimeStringToSeconds(skill.nextDeadline);
+    if (timeNeededForStep > nextDeadlineSecs) {
+      // color orange -- legit bottleneck
+      console.log('Strong Bottleneck on: ' + skill.name);
+      return 'darkorange';
+    } else if ( (timeNeededForStep / skill.potential) > nextDeadlineSecs) {
+      // color red -- severe bottleneck
+      console.log('Severe Bottleneck on: ' + skill.name);
+      return 'red';
+    }
+    // then, check whichCol hour column
+    const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
+    if (timeNeededPlusFutureSteps > nextDeadlineSecs) {
+      // possible bottleneck: color yellow
+      return 'gold';
+    } else if (timeNeededPlusFutureSteps / skill.potential > nextDeadlineSecs) {
+      // possible severe bottleneck: color dark yellow
+      return 'goldenrod';
+    }
 
   }
 
-  convertTimeStringToSeconds(timeStrin) {
-
+  convertTimeStringToSeconds(timeString) {
+    if (timeString[0] === '-') {
+      timeString.splice(0, 1);
+    }
+    let time = timeString.split(':');
+    let hh = time[0];
+    let mm = time[1];
+    hh = hh * 60 * 60;
+    mm = mm * 60;
+    time = hh + mm;
+    return time;
   }
 
   simulateHoursImageTemplates(skillsArr) {

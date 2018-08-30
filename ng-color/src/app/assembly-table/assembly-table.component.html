@@ -56,7 +56,7 @@
     </tr>
     <tr *ngFor="let skill of skills, index as i">
       <td>{{i}}</td>
-      <td>{{skill.name}}</td>
+      <td title="Avg Ipt: {{skill.avgIpt}}, Avg Rej: {{skill.avgRej}}">{{skill.name}}</td>
       <td>{{skill.pipeline | number: '1.0-0'}}</td>
       <td>{{skill.notAssigned | number: '1.0-0'}}</td>
       <td>{{skill.assigned | number: '1.0-0'}}</td>
@@ -69,10 +69,10 @@
       <td>{{skill.idle | number: '1.0-0'}}</td>
       <td>{{skill.freelancer | number: '1.0-0'}}</td>
       <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'zeroHours')}">{{skill.zeroHours | number: '1.0-0'}}</td>
-      <td>{{skill.twoHours | number: '1.0-0'}}</td>
-      <td>{{skill.fourHours | number: '1.0-0'}}</td>
-      <td>{{skill.eightHours | number: '1.0-0'}}</td>
-      <td>{{skill.twelveHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'twoHours')}">{{skill.twoHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'fourHours')}">{{skill.fourHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'eightHours')}">{{skill.eightHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'twelveHours')}">{{skill.twelveHours | number: '1.0-0'}}</td>
       <td>{{skill.sixteenHours | number: '1.0-0'}}</td>
       <td>{{skill.twentyFourHours | number: '1.0-0'}}</td>
       <td>{{skill.fourtyEightHours | number: '1.0-0'}}</td>
