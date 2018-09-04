@@ -1,5 +1,6 @@
 import { SkillsService } from './../skills.service';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'pc-assembly-table',
@@ -12,6 +13,13 @@ export class AssemblyTableComponent implements OnInit {
 
   zeSkills = this.generateRandomScenario(this._skills.skills);
   skills = this.generateRandomEditorDeficiencyBottleneck(this.zeSkills);
+  editorsInputArrBool = function () {
+    const arr: Array<boolean> = [];
+    for (let i = 0; i < this.skills.length; i++) {
+      arr.push(false);
+    }
+    return arr;
+  };
 
 
   constructor( private _skills: SkillsService ) { }
@@ -45,8 +53,9 @@ export class AssemblyTableComponent implements OnInit {
 
       currentSkill.editors = Math.round(Math.random() * 40);
 
-      // currentSkill.potential = ( (Math.random() * 10) > 9 ) ? 0 : ( ((Math.random() * 10) > 8) ? currentSkill.editors +
-      // Math.round(Math.random() * 0) : currentSkill.editors/2 + Math.round(Math.random() * 0) );
+      currentSkill.potential = ( (Math.random() * 10) > 9 ) ? 0 : ( ((Math.random() * 10) > 8) ? currentSkill.editors +
+      Math.round(Math.random() * 0) : currentSkill.editors / 2 + Math.round(Math.random() * 0) );
+
       currentSkill.forced = (Math.round(Math.random() * 100) > 5) ? 0 : Math.round(Math.random() * 10);
       currentSkill.idle = (Math.round(Math.random() * 100) > 10) ? 0 : Math.round(Math.random() * 10);
       // hours randomizing below
@@ -121,7 +130,7 @@ export class AssemblyTableComponent implements OnInit {
   }
 
   genNewBottleneck(name) {
-    console.log(name);
+    console.log('generating bottleneck on: ' + name);
     this.generateRandomEditorDeficiencyBottleneck(this.skills, name);
   }
 
@@ -132,32 +141,46 @@ export class AssemblyTableComponent implements OnInit {
       return false;
     }
   }
-  ui_getBottleneckColor(skill, whichCol) {
-    if (skill.name === 'Gender Detection') { console.log('Running bottleneck checker for ' + skill.name)}
-    const val = skill[whichCol];
-    const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt;
-    const timeNeededForStep = timeNeededForOnePe / skill.editors;
-    // first, check to see if timeNeededForStep
-    const nextDeadlineSecs = this.convertTimeStringToSeconds(skill.nextDeadline);
-    if (timeNeededForStep > nextDeadlineSecs) {
-      // color orange -- legit bottleneck
-      console.log('Strong Bottleneck on: ' + skill.name);
-      return 'darkorange';
-    } else if ( (timeNeededForStep / skill.potential) > nextDeadlineSecs) {
-      // color red -- severe bottleneck
-      console.log('Severe Bottleneck on: ' + skill.name);
-      return 'red';
-    }
-    // then, check whichCol hour column
-    const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
-    if (timeNeededPlusFutureSteps > nextDeadlineSecs) {
-      // possible bottleneck: color yellow
-      return 'gold';
-    } else if (timeNeededPlusFutureSteps / skill.potential > nextDeadlineSecs) {
-      // possible severe bottleneck: color dark yellow
-      return 'goldenrod';
-    }
 
+  ui_getBottleneckColor(skill, whichCol) {
+    // if (skill.name === 'Gender Detection') { console.log('Running bottleneck checker for ' + skill.name)}
+    const val = skill[whichCol];
+    if (val) {
+      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt;
+      const timeNeededForStep = timeNeededForOnePe / skill.editors;
+      // first, check to see if timeNeededForStep
+      const nextDeadlineSecs = this.convertTimeStringToSeconds(skill.nextDeadline);
+      if (timeNeededForStep > nextDeadlineSecs) {
+        // color orange -- legit bottleneck
+        // console.log('Strong Bottleneck on: ' + skill.name);
+        return {
+          'color': 'red',
+          'fontWeight': 400
+          };
+      } else if ( (timeNeededForStep / skill.potential) > nextDeadlineSecs) {
+        // color red -- severe bottleneck
+        // console.log('Severe Bottleneck on: ' + skill.name);
+        return {
+          'color': 'red',
+          'fontWeight': 700
+          };
+      }
+      // then, check whichCol hour column
+      const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
+      if (timeNeededPlusFutureSteps > nextDeadlineSecs) {
+        // possible bottleneck: color yellow
+        return {
+          'color': 'darkorange',
+          'fontWeight': 400
+          };
+      } else if (timeNeededPlusFutureSteps / skill.potential > nextDeadlineSecs) {
+        // possible severe bottleneck: color dark yellow
+        return {
+          'color': 'darkorange',
+          'fontWeight': 700
+          };
+      }
+    }
   }
 
   convertTimeStringToSeconds(timeString) {
@@ -173,30 +196,12 @@ export class AssemblyTableComponent implements OnInit {
     return time;
   }
 
-  simulateHoursImageTemplates(skillsArr) {
-    for (const skill of skillsArr) {
-      skill.zeroHoursTemplate = skill.templates[(Math.floor(Math.random() * skill.templates.length))];
-      let timeInFutureSteps = 0;
-      const indexOfSkill = skill.zeroHoursTemplate.indexOf(skill.name);
-      for (let i = (indexOfSkill + 1); i < skill.zeroHoursTemplate.length; i++) {
-        const futureStep = skill.zeroHoursTemplate[i];
-        const futureStepIpt = (skillsArr.find(obj => obj.name === skill.name)).avgIpt;
-        timeInFutureSteps = timeInFutureSteps + futureStepIpt;
-      }
-      skill.zeroHoursTimeInFutureSteps = timeInFutureSteps;
-    }
-    console.log(skillsArr[0].zeroHoursTimeInFutureSteps);
+  editEditors(index) {
+    this.editorsInputArrBool[index] = true;
   }
-
-  // if editors and potential == 0, then potential is red
-
-  highlightRowYellow(skillsArr) {
-    for (let i = 0; i < skillsArr.length; i++) {
-      const currentSkill = skillsArr[i];
-      let val = currentSkill.zeroHours * (1 + currentSkill.avgRej) * currentSkill.avgIpt / currentSkill.editors;
-      val = val * 2; // remove this line
-    }
+  saveEditors(index) {
+    this.editorsInputArrBool[index] = false;
+    console.log('clicked save');
   }
-
 
 }

@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 
 import { AppComponent } from './app.component';
 import { AssemblyTableComponent } from './assembly-table/assembly-table.component';
@@ -12,7 +14,8 @@ import { ControlPanelComponent } from './assembly-table/control-panel/control-pa
     ControlPanelComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

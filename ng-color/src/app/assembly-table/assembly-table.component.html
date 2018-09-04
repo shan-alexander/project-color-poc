@@ -63,16 +63,19 @@
       <td><a href="#">{{skill.longestWaitingTime}}</a></td>
       <td><a href="#">{{skill.nextDeadline}}</a></td>
       <td><a href="#" [ngStyle]="{'color': ui_sortIsRed(skill.sorting) ? 'red' : '337ab7'}">{{skill.sorting}}</a></td>
-      <td><a href="#">{{skill.editors | number: '1.0-0'}}</a></td>
+      <td (click)="editEditors(i)">
+        <a href="#" *ngIf="!editorsInputArrBool[i]">{{skill.editors | number: '1.0-0'}}</a>
+        <span *ngIf="editorsInputArrBool[i]===true" ><input type="number" name="editors{{i}}" [value]="skill.editors" [(ngModel)]="skills[i].editors"  />&nbsp;<i (click)="saveEditors(i)">save</i></span>
+      </td>
       <td><a href="#">{{skill.potential | number: '1.0-0'}}</a></td>
       <td><a href="#">{{skill.forced | number: '1.0-0'}}</a></td>
       <td>{{skill.idle | number: '1.0-0'}}</td>
       <td>{{skill.freelancer | number: '1.0-0'}}</td>
-      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'zeroHours')}">{{skill.zeroHours | number: '1.0-0'}}</td>
-      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'twoHours')}">{{skill.twoHours | number: '1.0-0'}}</td>
-      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'fourHours')}">{{skill.fourHours | number: '1.0-0'}}</td>
-      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'eightHours')}">{{skill.eightHours | number: '1.0-0'}}</td>
-      <td [ngStyle]="{'color': ui_getBottleneckColor(skill, 'twelveHours')}">{{skill.twelveHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="ui_getBottleneckColor(skill, 'zeroHours')">{{skill.zeroHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="ui_getBottleneckColor(skill, 'twoHours')">{{skill.twoHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="ui_getBottleneckColor(skill, 'fourHours')">{{skill.fourHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="ui_getBottleneckColor(skill, 'eightHours')">{{skill.eightHours | number: '1.0-0'}}</td>
+      <td [ngStyle]="ui_getBottleneckColor(skill, 'twelveHours')">{{skill.twelveHours | number: '1.0-0'}}</td>
       <td>{{skill.sixteenHours | number: '1.0-0'}}</td>
       <td>{{skill.twentyFourHours | number: '1.0-0'}}</td>
       <td>{{skill.fourtyEightHours | number: '1.0-0'}}</td>
