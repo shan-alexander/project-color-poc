@@ -87,22 +87,21 @@
           <a *ngIf="editorsInputArrBool[i]===0">{{skill.editors | number: '1.0-0'}}</a>
           <div *ngIf="editorsInputArrBool[i]===1">
             <input type="number" class="form-control" style="min-width:67px;" name="editors{{i}}" [value]="skill.editors" [(ngModel)]="skills[i].editors"  />
-            <!-- <i class="btn btn-sm btn-success" (click)="saveEditors(i)">&nbsp;save&nbsp;</i> -->
           </div>
         </td>
         <td><a >{{skill.potential | number: '1.0-0'}}</a></td>
         <td><a >{{skill.forced | number: '1.0-0'}}</a></td>
         <td>{{skill.idle | number: '1.0-0'}}</td>
         <td>{{skill.freelancer | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'zeroHours')" title="{{ui_getEditorsNeeded(skill, 'zeroHours')}}">{{skill.zeroHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'twoHours')" title="{{ui_getEditorsNeeded(skill, 'twoHours')}}">{{skill.twoHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'fourHours')" title="{{ui_getEditorsNeeded(skill, 'fourHours')}}">{{skill.fourHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'eightHours')" title="{{ui_getEditorsNeeded(skill, 'eightHours')}}">{{skill.eightHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'twelveHours')" title="{{ui_getEditorsNeeded(skill, 'twelveHours')}}">{{skill.twelveHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'sixteenHours')" title="{{ui_getEditorsNeeded(skill, 'sixteenHours')}}">{{skill.sixteenHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'twentyFourHours')" title="{{ui_getEditorsNeeded(skill, 'twentyFourHours')}}">{{skill.twentyFourHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'fourtyEightHours')" title="{{ui_getEditorsNeeded(skill, 'fourtyEightHours')}}">{{skill.fourtyEightHours | number: '1.0-0'}}</td>
-        <td [ngStyle]="ui_getBottleneckColor(skill, 'seventyTwoHours')" title="{{ui_getEditorsNeeded(skill, 'seventyTwoHours')}}">{{skill.seventyTwoHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'zeroHours')" title="{{skill.name}}, &lt;0hrs&#013;{{ui_getEditorsNeeded(skill, 'zeroHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.zeroHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'twoHours')" title="{{skill.name}}, &lt;2hrs&#013;{{ui_getEditorsNeeded(skill, 'twoHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.twoHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'fourHours')" title="{{skill.name}}, &lt;4hrs&#013;{{ui_getEditorsNeeded(skill, 'fourHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.fourHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'eightHours')" title="{{skill.name}}, &lt;8hrs&#013;{{ui_getEditorsNeeded(skill, 'eightHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.eightHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'twelveHours')" title="{{skill.name}}, &lt;12hrs&#013;{{ui_getEditorsNeeded(skill, 'twelveHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.twelveHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'sixteenHours')" title="{{skill.name}}, &lt;16hrs&#013;{{ui_getEditorsNeeded(skill, 'sixteenHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.sixteenHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'twentyFourHours')" title="{{skill.name}}, &lt;24hrs&#013;{{ui_getEditorsNeeded(skill, 'twentyFourHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.twentyFourHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'fourtyEightHours')" title="{{skill.name}}, &lt;48hrs&#013;{{ui_getEditorsNeeded(skill, 'fourtyEightHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.fourtyEightHours | number: '1.0-0'}}</td>
+        <td [ngStyle]="ui_getBottleneckColor(skill, 'seventyTwoHours')" title="{{skill.name}}, &lt;72hrs&#013;{{ui_getEditorsNeeded(skill, 'seventyTwoHours')}}&#013;Avg Ipt: {{skill.avgIpt}}">{{skill.seventyTwoHours | number: '1.0-0'}}</td>
       </tr>
     </tbody>
   </table>
