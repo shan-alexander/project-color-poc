@@ -1,5 +1,5 @@
 import { SkillsService } from './../skills.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -11,19 +11,18 @@ export class AssemblyTableComponent implements OnInit {
   previousGeneratedBottleNeck: Array<string> = [];
   selectedSkill;
 
-  zeSkills = this.generateRandomScenario(this._skills.skills);
-  skills = this.generateRandomEditorDeficiencyBottleneck(this.zeSkills);
-  editorsInputArrBool = function () {
-    const arr: Array<boolean> = [];
-    for (let i = 0; i < this.skills.length; i++) {
-      arr.push(false);
-    }
-    return arr;
-  };
+  skills = this.generateRandomEditorDeficiencyBottleneck(this.generateRandomScenario(this._skills.skills));
+  editorsInputArrBool: Array<number>;
+  buffer = 1.20;
 
 
-  constructor( private _skills: SkillsService ) { }
+  constructor( private _skills: SkillsService, private _ref: ChangeDetectorRef ) { }
   ngOnInit() {
+      const arr: Array<number> = [];
+      for (let i = 0; i < this.skills.length; i++) {
+        arr.push(0);
+      }
+      this.editorsInputArrBool = arr;
   }
 
   generateRandomScenario(skillsArr) {
@@ -53,13 +52,13 @@ export class AssemblyTableComponent implements OnInit {
 
       currentSkill.editors = Math.round(Math.random() * 40);
 
-      currentSkill.potential = ( (Math.random() * 10) > 9 ) ? 0 : ( ((Math.random() * 10) > 8) ? currentSkill.editors +
+      currentSkill.potential = ( (Math.random() * 10) > 9 ) ? 1 : ( ((Math.random() * 10) > 8) ? currentSkill.editors +
       Math.round(Math.random() * 0) : currentSkill.editors / 2 + Math.round(Math.random() * 0) );
 
       currentSkill.forced = (Math.round(Math.random() * 100) > 5) ? 0 : Math.round(Math.random() * 10);
       currentSkill.idle = (Math.round(Math.random() * 100) > 10) ? 0 : Math.round(Math.random() * 10);
       // hours randomizing below
-      // currentSkill.zeroHours = ((Math.random() * 100 > 10) ? 0 : Math.round(Math.random() * 50));
+      currentSkill.zeroHours = ((Math.random() * 100 > 10) ? 0 : Math.round(Math.random() * 50));
       currentSkill.twoHours = (Math.random() * 100 > 10) ?
         currentSkill.zeroHours : (currentSkill.zeroHours + (Math.round(Math.random() * 30)));
       currentSkill.fourHours = (Math.random() * 100 > 10) ?
@@ -143,44 +142,68 @@ export class AssemblyTableComponent implements OnInit {
   }
 
   ui_getBottleneckColor(skill, whichCol) {
-    // if (skill.name === 'Gender Detection') { console.log('Running bottleneck checker for ' + skill.name)}
     const val = skill[whichCol];
     if (val) {
-      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt;
+      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * this.buffer;
       const timeNeededForStep = timeNeededForOnePe / skill.editors;
-      // first, check to see if timeNeededForStep
-      const nextDeadlineSecs = this.convertTimeStringToSeconds(skill.nextDeadline);
-      if (timeNeededForStep > nextDeadlineSecs) {
-        // color orange -- legit bottleneck
-        // console.log('Strong Bottleneck on: ' + skill.name);
+      const colDeadlineSecs = this.convertColNameToSecs(whichCol); // example: "<4hr column" = 4 * 60 * 60
+      if (timeNeededForStep > colDeadlineSecs) {
         return {
           'color': 'red',
           'fontWeight': 400
           };
-      } else if ( (timeNeededForStep / skill.potential) > nextDeadlineSecs) {
-        // color red -- severe bottleneck
-        // console.log('Severe Bottleneck on: ' + skill.name);
+      } else if ( skill.potential > 0 && (timeNeededForStep / skill.potential) > colDeadlineSecs) {
         return {
           'color': 'red',
           'fontWeight': 700
           };
       }
-      // then, check whichCol hour column
       const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
-      if (timeNeededPlusFutureSteps > nextDeadlineSecs) {
-        // possible bottleneck: color yellow
+      if (timeNeededPlusFutureSteps > colDeadlineSecs) {
         return {
           'color': 'darkorange',
           'fontWeight': 400
           };
-      } else if (timeNeededPlusFutureSteps / skill.potential > nextDeadlineSecs) {
-        // possible severe bottleneck: color dark yellow
+      } else if (timeNeededPlusFutureSteps / skill.potential > colDeadlineSecs) {
         return {
           'color': 'darkorange',
           'fontWeight': 700
           };
       }
     }
+  }
+
+  convertColNameToSecs(colName) {
+    let secs;
+    if (colName === 'zeroHours') { secs = 1;
+    } else if (colName === 'twoHours') {
+      secs = 2 * 60 * 60;
+    } else if (colName === 'fourHours') {
+      secs = 4 * 60 * 60;
+    } else if (colName === 'eightHours') {
+      secs = 8 * 60 * 60;
+    } else if (colName === 'twelveHours') {
+      secs = 12 * 60 * 60;
+    } else if (colName === 'sixteenHours') {
+      secs = 16 * 60 * 60;
+    } else if (colName === 'twentyFourHours') {
+      secs = 24 * 60 * 60;
+    } else if (colName === 'fourtyEightHours') {
+      secs = 48 * 60 * 60;
+    } else if (colName === 'seventyTwoHours') {
+      secs = 72 * 60 * 60;
+    }
+    return secs;
+  }
+
+  ui_getEditorsNeeded(skill, whichCol) {
+    const val = skill[whichCol];
+    const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt;
+    const editorsNeeded = Math.ceil(
+      timeNeededForOnePe /
+      this.convertColNameToSecs(whichCol)
+    );
+    return 'Estimated editors needed: ' + editorsNeeded;
   }
 
   convertTimeStringToSeconds(timeString) {
@@ -197,11 +220,29 @@ export class AssemblyTableComponent implements OnInit {
   }
 
   editEditors(index) {
-    this.editorsInputArrBool[index] = true;
+    this.editorsInputArrBool[index] = 1;
   }
   saveEditors(index) {
-    this.editorsInputArrBool[index] = false;
+    this.editorsInputArrBool[index] = 0;
     console.log('clicked save');
+  }
+
+  ui_startQueue() {
+    const arr: Array<number> = [];
+      for (let i = 0; i < this.skills.length; i++) {
+        arr.push(0);
+      }
+      this.editorsInputArrBool = arr;
+  }
+
+  ui_resetQueue() {
+    this.skills = this.generateRandomScenario(this.skills);
+    this.previousGeneratedBottleNeck = [];
+    console.log('reset');
+  }
+  ui_changeBuffer(val) {
+    this.buffer = 1 + parseFloat(val);
+    console.log('Buffer is now: ' + this.buffer);
   }
 
 }
