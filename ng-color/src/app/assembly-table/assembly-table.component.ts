@@ -150,24 +150,24 @@ export class AssemblyTableComponent implements OnInit {
         if (skill.potential > 0 && (timeNeededForStep / skill.potential) > colDeadlineSecs) {
         return {
           'color': 'red',
-          'fontWeight': 400
+          'fontWeight': 700
           };
       } else if (timeNeededForStep > colDeadlineSecs) {
         return {
           'color': 'red',
-          'fontWeight': 700
+          'fontWeight': 400
           };
       }
       const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
       if (timeNeededPlusFutureSteps / skill.potential > colDeadlineSecs) {
         return {
           'color': 'darkorange',
-          'fontWeight': 400
+          'fontWeight': 700
           };
       } else if (timeNeededPlusFutureSteps > colDeadlineSecs) {
         return {
           'color': 'darkorange',
-          'fontWeight': 700
+          'fontWeight': 400
           };
       }
     }
