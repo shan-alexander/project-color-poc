@@ -147,27 +147,23 @@ export class AssemblyTableComponent implements OnInit {
       const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * this.buffer;
       const timeNeededForStep = timeNeededForOnePe / skill.editors;
       const colDeadlineSecs = this.convertColNameToSecs(whichCol); // example: "<4hr column" = 4 * 60 * 60
-        if (skill.potential > 0 && (timeNeededForStep / skill.potential) > colDeadlineSecs) {
-        return {
-          'color': 'red',
-          'fontWeight': 700
-          };
-      } else if (timeNeededForStep > colDeadlineSecs) {
-        return {
-          'color': 'red',
-          'fontWeight': 400
-          };
-      }
       const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
-      if (timeNeededPlusFutureSteps / skill.potential > colDeadlineSecs) {
-        return {
-          'color': 'darkorange',
-          'fontWeight': 700
-          };
+      let fontw = 400;
+      if (timeNeededForStep > colDeadlineSecs) {
+        if ( skill.potential > 0 && (timeNeededForStep / skill.potential) > colDeadlineSecs ) {
+          fontw = 700;
+        }
+      return {
+        'color': 'red',
+        'fontWeight': fontw
+        };
       } else if (timeNeededPlusFutureSteps > colDeadlineSecs) {
+        if (timeNeededPlusFutureSteps / skill.potential > colDeadlineSecs) {
+          fontw = 700;
+        }
         return {
           'color': 'darkorange',
-          'fontWeight': 400
+          'fontWeight': fontw
           };
       }
     }
