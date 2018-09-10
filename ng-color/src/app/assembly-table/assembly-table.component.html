@@ -81,8 +81,8 @@
         <td>{{skill.notAssigned | number: '1.0-0'}}</td>
         <td>{{skill.assigned | number: '1.0-0'}}</td>
         <td><a >{{skill.longestWaitingTime}}</a></td>
-        <td><a >{{skill.nextDeadline}}</a></td>
-        <td><a  [ngStyle]="{'color': ui_sortIsRed(skill.sorting) ? 'red' : '#337ab7'}">{{skill.sorting}}</a></td>
+        <td><a [ngStyle]="{'color': ui_timeStringIsRed(skill.nextDeadline) ? 'red' : '#337ab7'}">{{skill.nextDeadline}}</a></td>
+        <td><a  [ngStyle]="{'color': ui_timeStringIsRed(skill.sorting) ? 'red' : '#337ab7'}">{{skill.sorting}}</a></td>
         <td (click)="editEditors(i)">
           <a *ngIf="editorsInputArrBool[i]===0">{{skill.editors | number: '1.0-0'}}</a>
           <div *ngIf="editorsInputArrBool[i]===1">
