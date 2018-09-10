@@ -13,7 +13,7 @@ export class AssemblyTableComponent implements OnInit {
 
   skills = this.generateRandomEditorDeficiencyBottleneck(this.generateRandomScenario(this._skills.skills));
   editorsInputArrBool: Array<number>;
-  buffer = 1.20;
+  orangeFormula = false;
 
 
   constructor( private _skills: SkillsService, private _ref: ChangeDetectorRef ) { }
@@ -144,7 +144,7 @@ export class AssemblyTableComponent implements OnInit {
   ui_getBottleneckColor(skill, whichCol) {
     const val = skill[whichCol];
     if (val) {
-      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * this.buffer;
+      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * skill.skillBuffer;
       const timeNeededForStep = timeNeededForOnePe / skill.editors;
       const colDeadlineSecs = this.convertColNameToSecs(whichCol); // example: "<4hr column" = 4 * 60 * 60
       const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
@@ -157,7 +157,7 @@ export class AssemblyTableComponent implements OnInit {
         'color': 'red',
         'fontWeight': fontw
         };
-      } else if (timeNeededPlusFutureSteps > colDeadlineSecs) {
+      } else if ( this.orangeFormula && timeNeededPlusFutureSteps > colDeadlineSecs) {
         if (timeNeededPlusFutureSteps / skill.potential > colDeadlineSecs) {
           fontw = 700;
         }
@@ -195,7 +195,7 @@ export class AssemblyTableComponent implements OnInit {
 
   ui_getEditorsNeeded(skill, whichCol) {
     const val = skill[whichCol];
-    const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt;
+    const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * skill.skillBuffer;
     const editorsNeeded = Math.ceil(
       timeNeededForOnePe /
       this.convertColNameToSecs(whichCol)
@@ -236,10 +236,6 @@ export class AssemblyTableComponent implements OnInit {
     this.skills = this.generateRandomScenario(this.skills);
     this.previousGeneratedBottleNeck = [];
     console.log('reset');
-  }
-  ui_changeBuffer(val) {
-    this.buffer = 1 + parseFloat(val);
-    console.log('Buffer is now: ' + this.buffer);
   }
 
 }

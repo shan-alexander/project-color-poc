@@ -32,7 +32,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 23.91,
       avgRej: 0.0043,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Contrast Against Background',
@@ -58,7 +58,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 39.38,
       avgRej: 0.0041,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Model Detection',
@@ -84,7 +84,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 11.88,
       avgRej: 0.0012,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Model Skin Area',
@@ -110,7 +110,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 20.23,
       avgRej: 0.0016,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Mirror Detection',
@@ -136,7 +136,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 23.14,
       avgRej: 0.0031,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Hanger Detection',
@@ -162,7 +162,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 15.26,
       avgRej: 0.0008,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Props Detection',
@@ -188,7 +188,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 29.56,
       avgRej: 0.0028,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Rotate',
@@ -214,7 +214,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 35.64,
       avgRej: 0.0061,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Crop & Scale',
@@ -240,7 +240,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 58.80,
       avgRej: 0.0128,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Preparation',
@@ -266,7 +266,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 177.97,
       avgRej: 0.0488,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'New Preparation',
@@ -292,7 +292,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 116.59,
       avgRej: 0.0455,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Auto Preparation',
@@ -318,7 +318,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 98.15,
       avgRej: 0.0291,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Photo Correction',
@@ -344,7 +344,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 198.48,
       avgRej: 0.0434,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Combination',
@@ -370,7 +370,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 141.91,
       avgRej: 0.0393,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'General Retouch',
@@ -396,7 +396,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 158.34,
       avgRej: 0.0434,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Recreate Details',
@@ -422,7 +422,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 144.46,
       avgRej: 0.0513,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Shape',
@@ -448,7 +448,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 163.71,
       avgRej: 0.0460,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Generic Retouch',
@@ -474,7 +474,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 152.55,
       avgRej: 0.0552,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: 3D',
@@ -500,7 +500,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 236.45,
       avgRej: 0.0580,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Garments 1',
@@ -526,7 +526,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 134.29,
       avgRej: 0.0421,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Garments 2',
@@ -552,7 +552,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 143.65,
       avgRej: 0.0487,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Garments 3',
@@ -578,7 +578,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 208.92,
       avgRej: 0.0695,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Footwear',
@@ -604,7 +604,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 231.28,
       avgRej: 0.0509,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Jewelry',
@@ -630,7 +630,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 186.33,
       avgRej: 0.0743,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Furniture',
@@ -656,7 +656,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 170.99,
       avgRej: 0.0426,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Accessories',
@@ -682,7 +682,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 145.60,
       avgRej: 0.0418,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Cosmetics',
@@ -708,7 +708,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 172.92,
       avgRej: 0.0544,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Model',
@@ -734,7 +734,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 150.48,
       avgRej: 0.0456,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Model Advanced',
@@ -760,7 +760,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 27,
       avgRej: 0.0000,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Retouch: Skin Processing',
@@ -786,7 +786,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 184.38,
       avgRej: 0.0733,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Qualification',
@@ -812,7 +812,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 264.29,
       avgRej: 0.0901,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Preparation for Colorways',
@@ -838,7 +838,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 107.00,
       avgRej: 0.0435,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Texture Replacement',
@@ -864,7 +864,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 458.56,
       avgRej: 0.0471,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Color Change',
@@ -890,7 +890,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 312.52,
       avgRej: 0.0801,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Dobby',
@@ -916,7 +916,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 389.64,
       avgRej: 0.1338,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'New Path',
@@ -942,7 +942,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 336.57,
       avgRej: 0.0635,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Apply Path',
@@ -968,7 +968,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 63.06,
       avgRej: 0.0241,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Advanced Path',
@@ -994,7 +994,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 231.52,
       avgRej: 0.0660,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Trimap',
@@ -1020,7 +1020,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 92.42,
       avgRej: 0.0194,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'New Layer Mask',
@@ -1046,7 +1046,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 336.57,
       avgRej: 0.0635,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'AI Mask',
@@ -1072,7 +1072,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 266.30,
       avgRej: 0.0621,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Apply Layer Mask',
@@ -1098,7 +1098,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 124.03,
       avgRej: 0.0332,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Path & Mask',
@@ -1124,7 +1124,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 283.19,
       avgRej: 0.0644,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Apply Path & Mask',
@@ -1150,7 +1150,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 128.11,
       avgRej: 0.0309,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Advanced Mask',
@@ -1176,7 +1176,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 219.50,
       avgRej: 0.0734,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Color Adjustment',
@@ -1202,7 +1202,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 191.20,
       avgRej: 0.0678,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Background Retouch',
@@ -1228,7 +1228,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 193.40,
       avgRej: 0.0697,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Dumbledore',
@@ -1254,7 +1254,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 182.47,
       avgRej: 0.0546,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Snape',
@@ -1280,7 +1280,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 173.51,
       avgRej: 0.0505,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Stack',
@@ -1306,7 +1306,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 105.32,
       avgRej: 0.0190,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'VPE Auto Stencil',
@@ -1332,7 +1332,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 123.28,
       avgRej: 0.0394,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Auto Stencil',
@@ -1358,7 +1358,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 160.48,
       avgRej: 0.0478,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Stencil Manual',
@@ -1384,7 +1384,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 191.93,
       avgRej: 0.0520,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Background Extension',
@@ -1410,7 +1410,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 166.90,
       avgRej: 0.0633,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Replace Object',
@@ -1436,7 +1436,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 83.06,
       avgRej: 0.0724,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Shadow: Drop',
@@ -1462,7 +1462,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 142.31,
       avgRej: 0.0459,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Shadow: Reflection',
@@ -1488,7 +1488,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 226.72,
       avgRej: 0.0489,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Shadow: Natural',
@@ -1514,7 +1514,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 154.57,
       avgRej: 0.0489,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Shadow: Cast',
@@ -1540,7 +1540,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 183.99,
       avgRej: 0.0588,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Bumblebee',
@@ -1566,7 +1566,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 204.83,
       avgRej: 0.0682,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Optimus',
@@ -1592,7 +1592,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 189.18,
       avgRej: 0.0576,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'McQueen',
@@ -1618,7 +1618,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 497.42,
       avgRej: 0.1269,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Mater',
@@ -1644,7 +1644,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 245.33,
       avgRej: 0.0963,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'The Flash',
@@ -1670,7 +1670,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 342.40,
       avgRej: 0.0955,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Cyborg',
@@ -1696,7 +1696,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 302.59,
       avgRej: 0.0963,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Burberry',
@@ -1722,7 +1722,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 530.89,
       avgRej: 0.1668,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Finalize',
@@ -1748,7 +1748,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 143.65,
       avgRej: 0.0334,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'VPE Auto Finalize',
@@ -1774,7 +1774,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 124.46,
       avgRej: 0.0392,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
     {
       name: 'Fix',
@@ -1800,7 +1800,7 @@ export class SkillsService {
       seventyTwoHours: 174,
       avgIpt: 171.88,
       avgRej: 0.0860,
-      timeNeededInFutureSteps: 1130
+      timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
   ];
 }
