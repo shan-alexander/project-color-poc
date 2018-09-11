@@ -61,21 +61,21 @@ export class AssemblyTableComponent implements OnInit {
         currentSkill.twentyFourHours : (currentSkill.twentyFourHours + (Math.round(Math.random() * 1000)));
       currentSkill.seventyTwoHours = (Math.random() * 100 > 20) ?
         currentSkill.fourtyEightHours : (currentSkill.fourtyEightHours + (Math.round(Math.random() * 555)));
-        if(currentSkill.seventyTwoHours == 0) {currentSkill.seventyTwoHours = Math.round(Math.random()* 500 )}
+      if (currentSkill.seventyTwoHours === 0) {currentSkill.seventyTwoHours = Math.round(Math.random() * 500 ); }
       currentSkill.timeInFutureSteps = 123 * Math.round(Math.random() * 10);
 
       let lowerBound = null;
       let upperBound = null;
-                            
-      if (currentSkill.zeroHours > 0 ) {lowerBound = 0; upperBound = 10;}                       
-      else if ( currentSkill.twoHours > 0 ) { lowerBound = 0; upperBound = 2 }
-      else if ( currentSkill.fourHours > 0 ) { lowerBound = 2; upperBound = 4 }
-      else if ( currentSkill.eightHours > 0 ) { lowerBound = 4; upperBound = 8 }
-      else if ( currentSkill.twelveHours > 0 ) { lowerBound = 8; upperBound = 12 }
-      else if ( currentSkill.sixteenHours > 0 ) { lowerBound = 12; upperBound = 16 }
-      else if ( currentSkill.twentyFourHours > 0 ) { lowerBound = 16; upperBound = 24 }
-      else if ( currentSkill.fourtyEightHours > 0 ) { lowerBound = 24; upperBound = 48 }
-      else if ( currentSkill.seventyTwoHours > 0 ) { lowerBound = 48; upperBound =  72 }
+
+      if (currentSkill.zeroHours > 0 ) {lowerBound = 0; upperBound = 10; }
+      else if ( currentSkill.twoHours > 0 ) { lowerBound = 0; upperBound = 2; }
+      else if ( currentSkill.fourHours > 0 ) { lowerBound = 2; upperBound = 4; }
+      else if ( currentSkill.eightHours > 0 ) { lowerBound = 4; upperBound = 8; }
+      else if ( currentSkill.twelveHours > 0 ) { lowerBound = 8; upperBound = 12; }
+      else if ( currentSkill.sixteenHours > 0 ) { lowerBound = 12; upperBound = 16; }
+      else if ( currentSkill.twentyFourHours > 0 ) { lowerBound = 16; upperBound = 24; }
+      else if ( currentSkill.fourtyEightHours > 0 ) { lowerBound = 24; upperBound = 48; }
+      else if ( currentSkill.seventyTwoHours > 0 ) { lowerBound = 48; upperBound =  72; }
 
       let hh: any;
       hh = Math.round((Math.random() * (upperBound - lowerBound)) + lowerBound);
@@ -83,15 +83,15 @@ export class AssemblyTableComponent implements OnInit {
       mm = Math.round(Math.random() * 60);
       (mm < 10) ? mm = '0' + mm : mm = '' + mm;
       currentSkill.nextDeadline = '' + hh + ':' + mm;
-      if(currentSkill.zeroHours > 0) {currentSkill.nextDeadline = '-' + currentSkill.nextDeadline}
+      if (currentSkill.zeroHours > 0) {currentSkill.nextDeadline = '-' + currentSkill.nextDeadline; }
 
       const sortingArraySplit = currentSkill.nextDeadline.split(':');
-      if(sortingArraySplit[0].charAt(0) == '-') {
+      if (sortingArraySplit[0].charAt(0) === '-') {
         hh = Math.abs(parseInt(sortingArraySplit[0], 10)) + Math.round(Math.abs(parseInt(sortingArraySplit[0], 10)) * Math.random());
         (hh < 10) ? hh = '0' + hh : hh = '' + hh;
         hh = '-' + hh;
         mm = parseInt(sortingArraySplit[1], 10) + Math.round(parseInt(sortingArraySplit[1], 10) * Math.random());
-        if(mm > 60) {mm = 59;}
+        if (mm > 60) { mm = 59; }
         (mm < 10) ? mm = '0' + mm : mm = '' + mm;
       } else {
         hh = parseInt(sortingArraySplit[0], 10) - Math.round(parseInt(sortingArraySplit[0], 10) * Math.random());
@@ -101,8 +101,8 @@ export class AssemblyTableComponent implements OnInit {
       }
         currentSkill.sorting = '' + hh + ':' + mm;
         currentSkill.notAssigned = currentSkill.seventyTwoHours * Math.random() * 0.5;
-        currentSkill.assigned = (Math.random() > 0.9) 
-          ? currentSkill.editors * (Math.random()+1) : currentSkill.editors * ((Math.random()+1) * 3);
+        currentSkill.assigned = (Math.random() > 0.9)
+          ? currentSkill.editors * (Math.random() + 1) : currentSkill.editors * ((Math.random() + 1) * 3);
         currentSkill.pipeline = currentSkill.seventyTwoHours - (currentSkill.notAssigned + currentSkill.assigned);
       }
 
