@@ -13,10 +13,14 @@ export class AssemblyTableComponent implements OnInit {
 
   skills = this.generateRandomEditorDeficiencyBottleneck(this.generateRandomScenario(this._skills.skills));
   editorsInputArrBool: Array<number>;
-  orangeFormula = false;
-
+  orangeFormula = false; // dev can config this to true to see orange bottleneck colors, see ui_getBottleneckColor()
+  unproductiveShiftTime = 1.5;
+  shiftTime = 8;
+  unproductiveShiftRatio = this.unproductiveShiftTime / this.shiftTime;
+  zeroHoursColBuffer_forEditorsNeeded = 1.20;
 
   constructor( private _skills: SkillsService, private _ref: ChangeDetectorRef ) { }
+
   ngOnInit() {
       const arr: Array<number> = [];
       for (let i = 0; i < this.skills.length; i++) {
@@ -173,7 +177,7 @@ export class AssemblyTableComponent implements OnInit {
   ui_getBottleneckColor(skill, whichCol) {
     const val = skill[whichCol];
     if (val) {
-      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * skill.skillBuffer;
+      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * skill.skillBuffer * (1 + this.unproductiveShiftRatio);
       const timeNeededForStep = timeNeededForOnePe / skill.editors;
       const colDeadlineSecs = this.convertColNameToSecs(whichCol); // example: "<4hr column" = 4 * 60 * 60
       const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
@@ -223,13 +227,21 @@ export class AssemblyTableComponent implements OnInit {
   }
 
   ui_getEditorsNeeded(skill, whichCol) {
+    let zeroColCheck = false;
+    if (whichCol === 'zeroHours') {
+      whichCol = 'twoHours';
+      zeroColCheck = true;
+    }
     const val = skill[whichCol];
     const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * skill.skillBuffer;
-    const editorsNeeded = Math.ceil(
+    let editorsNeeded =
       timeNeededForOnePe /
-      this.convertColNameToSecs(whichCol)
-    );
-    return 'Estimated editors needed: ' + editorsNeeded;
+      this.convertColNameToSecs(whichCol) * (1 - this.unproductiveShiftRatio)
+    ;
+    if (zeroColCheck) {
+      editorsNeeded = editorsNeeded * this.zeroHoursColBuffer_forEditorsNeeded;
+    }
+    return 'Estimated editors needed: ' + editorsNeeded.toFixed(2);
   }
 
   convertTimeStringToSeconds(timeString) {
@@ -248,6 +260,7 @@ export class AssemblyTableComponent implements OnInit {
   editEditors(index) {
     this.editorsInputArrBool[index] = 1;
   }
+
   saveEditors(index) {
     this.editorsInputArrBool[index] = 0;
     console.log('clicked save');
