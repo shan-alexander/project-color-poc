@@ -13,11 +13,14 @@ export class AssemblyTableComponent implements OnInit {
 
   skills = this.generateRandomEditorDeficiencyBottleneck(this.generateRandomScenario(this._skills.skills));
   editorsInputArrBool: Array<number>;
-  orangeFormula = false; // dev can config this to true to see orange bottleneck colors, see ui_getBottleneckColor()
   unproductiveShiftTime = 1.5;
   shiftTime = 8;
   unproductiveShiftRatio = this.unproductiveShiftTime / this.shiftTime;
   zeroHoursColBuffer_forEditorsNeeded = 1.20;
+
+  // dev configs:
+  orangeFormula = false; // dev can config this to true to see orange bottleneck colors, see ui_getBottleneckColor()
+  devDebug = false; // shows helpful data on the UI
 
   constructor( private _skills: SkillsService, private _ref: ChangeDetectorRef ) { }
 
@@ -40,7 +43,7 @@ export class AssemblyTableComponent implements OnInit {
       (mm < 10) ? mm = '0' + mm : mm = '' + mm;
       currentSkill.longestWaitingTime = '00:' + mm;
 
-      currentSkill.editors = Math.round(Math.random() * 40);
+      currentSkill.editors = Math.ceil(Math.random() * 40);
 
       currentSkill.potential = ( (Math.random() * 10) > 9 ) ? 1 : ( ((Math.random() * 10) > 8) ? currentSkill.editors +
       Math.round(Math.random() * 0) : currentSkill.editors / 2 + Math.round(Math.random() * 0) );
@@ -130,7 +133,7 @@ export class AssemblyTableComponent implements OnInit {
     console.log('Bottleneck generated on ' + randoSkill.name);
     this.setPreviousGeneratedBottleNeck(randoSkill.name);
 
-    randoSkill.editors = Math.round(Math.random() * 10);
+    randoSkill.editors = Math.ceil(Math.random() * 10);
     randoSkill.assigned = Math.round(randoSkill.editors * (1.2 + Math.random()) );
 
     let hh: any = Math.round(Math.random() * 2.7);
@@ -142,12 +145,12 @@ export class AssemblyTableComponent implements OnInit {
     randoSkill.nextDeadline = '' + hh + ':' + mm;
     randoSkill.sorting = '-0' + (Math.round(Math.random() * 3)) + ':' + ( (mm > 10 && mm < 50) ?
       parseInt(mm, 10) + Math.round(Math.random() * 10) : mm);
-    randoSkill.zeroHours = Math.round(Math.random() * 500);
-    randoSkill.twoHours = randoSkill.zeroHours + Math.round(Math.random() * 300);
-    randoSkill.fourHours = randoSkill.twoHours + Math.round(Math.random() * 300);
+    randoSkill.zeroHours = ((Math.random() * 100 > 98) ? 0 : Math.round(Math.random() * 500));
+    randoSkill.twoHours = (randoSkill.zeroHours > 0) ? randoSkill.zeroHours + Math.round(Math.random() * 300) : Math.round(Math.random() * 700);
+    randoSkill.fourHours = randoSkill.twoHours + Math.round(Math.random() * 500);
     randoSkill.eightHours = randoSkill.fourHours;
     randoSkill.twelveHours = randoSkill.eightHours;
-    randoSkill.sixteenHours = randoSkill.twelveHours + Math.round(Math.random() * 200);
+    randoSkill.sixteenHours = randoSkill.twelveHours + Math.round(Math.random() * 400);
     randoSkill.twentyFourHours = randoSkill.sixteenHours;
     randoSkill.fourtyEightHours = randoSkill.sixteenHours;
     randoSkill.seventyTwoHours = randoSkill.sixteenHours + Math.round(Math.random() * 333);
@@ -174,24 +177,29 @@ export class AssemblyTableComponent implements OnInit {
     }
   }
 
+  getTimeNeededForStep_InSecs(imgCount, rej, ipt, buffer) {
+    const time = imgCount * (1 + rej) * ipt * buffer;
+    return time;
+  }
+
   ui_getBottleneckColor(skill, whichCol) {
     const val = skill[whichCol];
     if (val) {
-      const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * skill.skillBuffer * (1 + this.unproductiveShiftRatio);
+      const timeNeededForOnePe = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer);
       const timeNeededForStep = timeNeededForOnePe / skill.editors;
       const colDeadlineSecs = this.convertColNameToSecs(whichCol); // example: "<4hr column" = 4 * 60 * 60
-      const timeNeededPlusFutureSteps = timeNeededForStep + skill.timeNeededInFutureSteps;
+      const timeNeededPlusFutureSteps = timeNeededForOnePe + skill.timeNeededInFutureSteps;
       let fontw = 400;
-      if (timeNeededForStep > colDeadlineSecs) {
-        if ( skill.potential > 0 && (timeNeededForStep / skill.potential) > colDeadlineSecs ) {
+      if (timeNeededForStep > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) {
+        if ( skill.potential > 0 && (timeNeededForOnePe / (skill.editors + skill.potential) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) ) {
           fontw = 700;
         }
       return {
         'color': 'red',
         'fontWeight': fontw
         };
-      } else if ( this.orangeFormula && timeNeededPlusFutureSteps > colDeadlineSecs) {
-        if (timeNeededPlusFutureSteps / skill.potential > colDeadlineSecs) {
+      } else if ( this.orangeFormula && (timeNeededPlusFutureSteps / skill.editors) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) ) ) {
+        if (timeNeededPlusFutureSteps / (skill.editors + skill.potential) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) {
           fontw = 700;
         }
         return {
@@ -200,6 +208,48 @@ export class AssemblyTableComponent implements OnInit {
           };
       }
     }
+  }
+
+  ui_getTimeEstForEditors(skill, whichCol) {
+    const val = skill[whichCol];
+    const time = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer);
+    const timeEditors = time / skill.editors;
+    const timePotentials = time / (skill.editors + skill.potential);
+    const colDeadline = this.convertColNameToSecs(whichCol);
+    if (this.devDebug) {
+      return 'Pot/Ed/DDL: ' + timePotentials.toFixed(0) + '/' + timeEditors.toFixed(0) + '/' + colDeadline;
+    } else {
+      return '';
+    }
+  }
+  convertTimeSecondsToString_HHMM(timeSecs) {
+    const hh = Math.floor(timeSecs / 3600);
+    const mm = Math.floor( (timeSecs % 3600) / 60);
+    let hh_str = hh.toString();
+    let mm_str = mm.toString();
+    if (hh < 10) { hh_str = '0' + hh_str; }
+    if (mm < 10) { mm_str = '0' + mm_str; }
+    const timeString = '' + hh_str + ':' + mm_str;
+    return timeString;
+  }
+
+  ui_convertTimeSecsToTimeFromNow(skill, whichCol) {
+    const val = skill[whichCol];
+    const time = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer) * (1 + this.unproductiveShiftRatio);
+    const timeEditors = time / skill.editors;
+    const timePotentials = time / (skill.editors + skill.potential);
+    // const timeNow = Math.floor(Date.now() / 1000);
+    // const timeEstOfDelivery_Editors = timeNow + timeEditors;
+    // // const timeEstOfDelivery_Potentials = timeNow + timePotentials;
+
+    // let date = new Date(null);
+    // date = new Date(null);
+    // date.setSeconds(timeEstOfDelivery_Editors); // specify value for SECONDS here
+    // const result = date.toISOString().substr(11, 8);
+
+    const result_e = this.convertTimeSecondsToString_HHMM(timeEditors);
+
+    return '' + skill.editors + ' Editors: ' + result_e;
   }
 
   convertColNameToSecs(colName) {
@@ -233,11 +283,9 @@ export class AssemblyTableComponent implements OnInit {
       zeroColCheck = true;
     }
     const val = skill[whichCol];
-    const timeNeededForOnePe = val * (1 + skill.avgRej) * skill.avgIpt * skill.skillBuffer;
-    let editorsNeeded =
-      timeNeededForOnePe /
-      this.convertColNameToSecs(whichCol) * (1 - this.unproductiveShiftRatio)
-    ;
+    const timeNeededForOnePe = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer);
+    let editorsNeeded = timeNeededForOnePe /
+      ( this.convertColNameToSecs(whichCol) * (1 - this.unproductiveShiftRatio) );
     if (zeroColCheck) {
       editorsNeeded = editorsNeeded * this.zeroHoursColBuffer_forEditorsNeeded;
     }
