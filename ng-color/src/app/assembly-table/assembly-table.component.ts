@@ -67,7 +67,7 @@ export class AssemblyTableComponent implements OnInit {
       currentSkill.fourtyEightHours = (Math.random() * 100 > 50) ?
         currentSkill.twentyFourHours : (currentSkill.twentyFourHours + (Math.round(Math.random() * 1000)));
       currentSkill.seventyTwoHours = (Math.random() * 100 > 20) ?
-        currentSkill.fourtyEightHours : (currentSkill.fourtyEightHours + (Math.round(Math.random() * 555)));
+        currentSkill.fourtyEightHours : (currentSkill.fourtyEightHours + (Math.round(Math.random() * 2000)));
       if (currentSkill.seventyTwoHours === 0) {currentSkill.seventyTwoHours = Math.round(Math.random() * 500 ); }
       currentSkill.timeInFutureSteps = 123 * Math.round(Math.random() * 10);
 
@@ -184,28 +184,31 @@ export class AssemblyTableComponent implements OnInit {
 
   ui_getBottleneckColor(skill, whichCol) {
     const val = skill[whichCol];
+    // if val=0 then no need to calculate
     if (val) {
-      const timeNeededForOnePe = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer);
-      const timeNeededForStep = timeNeededForOnePe / skill.editors;
-      const colDeadlineSecs = this.convertColNameToSecs(whichCol); // example: "<4hr column" = 4 * 60 * 60
-      const timeNeededPlusFutureSteps = timeNeededForOnePe + skill.timeNeededInFutureSteps;
-      let fontw = 400;
-      if (timeNeededForStep > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) {
-        if ( skill.potential > 0 && (timeNeededForOnePe / (skill.editors + skill.potential) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) ) {
-          fontw = 700;
-        }
-      return {
-        'color': 'red',
-        'fontWeight': fontw
-        };
-      } else if ( this.orangeFormula && (timeNeededPlusFutureSteps / skill.editors) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) ) ) {
-        if (timeNeededPlusFutureSteps / (skill.editors + skill.potential) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) {
-          fontw = 700;
-        }
+      // if editors=0 then do not calculate unless we need more than 1 editor
+      if (this.getEditorsNeeded(skill, whichCol) > 1) {
+        const timeNeededForOnePe = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer);
+        const colDeadlineSecs = this.convertColNameToSecs(whichCol); // example: "<4hr column" = 4 * 60 * 60
+        const timeNeededPlusFutureSteps = timeNeededForOnePe + skill.timeNeededInFutureSteps;
+        let fontw = 400;
+        if ( (timeNeededForOnePe / skill.editors) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) {
+          if ( skill.potential > 0 && (timeNeededForOnePe / (skill.editors + skill.potential) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) ) {
+            fontw = 700;
+          }
         return {
-          'color': 'darkorange',
+          'color': 'red',
           'fontWeight': fontw
           };
+        } else if ( this.orangeFormula && (timeNeededPlusFutureSteps / skill.editors) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) ) ) {
+          if (timeNeededPlusFutureSteps / (skill.editors + skill.potential) > (colDeadlineSecs * (1 - this.unproductiveShiftRatio) )) {
+            fontw = 700;
+          }
+          return {
+            'color': 'darkorange',
+            'fontWeight': fontw
+            };
+        }
       }
     }
   }
@@ -277,6 +280,11 @@ export class AssemblyTableComponent implements OnInit {
   }
 
   ui_getEditorsNeeded(skill, whichCol) {
+    const editorsNeeded = this.getEditorsNeeded(skill, whichCol);
+    return 'Estimated editors needed: ' + editorsNeeded;
+  }
+
+  getEditorsNeeded(skill, whichCol) {
     let zeroColCheck = false;
     if (whichCol === 'zeroHours') {
       whichCol = 'twoHours';
@@ -289,7 +297,7 @@ export class AssemblyTableComponent implements OnInit {
     if (zeroColCheck) {
       editorsNeeded = editorsNeeded * this.zeroHoursColBuffer_forEditorsNeeded;
     }
-    return 'Estimated editors needed: ' + editorsNeeded.toFixed(2);
+    return parseFloat(editorsNeeded.toFixed(2));
   }
 
   convertTimeStringToSeconds(timeString) {
