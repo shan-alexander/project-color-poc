@@ -9,13 +9,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class AssemblyTableComponent implements OnInit {
   previousGeneratedBottleNeck: Array<string> = [];
-  selectedSkill;
-
+  // skills = this._skills.skills;
   skills = this.generateRandomEditorDeficiencyBottleneck(this.generateRandomScenario(this._skills.skills));
   editorsInputArrBool: Array<number>;
-  unproductiveShiftTime = 1.5;
-  shiftTime = 8;
-  unproductiveShiftRatio = this.unproductiveShiftTime / this.shiftTime;
+  unproductiveShiftRatio = 1.5 / 8; // (unproductive shift time / shift time)
   zeroHoursColBuffer_forEditorsNeeded = 1.20;
 
   // dev configs:
@@ -25,11 +22,7 @@ export class AssemblyTableComponent implements OnInit {
   constructor( private _skills: SkillsService, private _ref: ChangeDetectorRef ) { }
 
   ngOnInit() {
-      const arr: Array<number> = [];
-      for (let i = 0; i < this.skills.length; i++) {
-        arr.push(0);
-      }
-      this.editorsInputArrBool = arr;
+      this.startQueue();
   }
 
   generateRandomScenario(skillsArr) {
@@ -42,12 +35,9 @@ export class AssemblyTableComponent implements OnInit {
       let mm: any = Math.round(Math.random() * 60);
       (mm < 10) ? mm = '0' + mm : mm = '' + mm;
       currentSkill.longestWaitingTime = '00:' + mm;
-
-      currentSkill.editors = Math.ceil(Math.random() * 40);
-
+      currentSkill.editors = (Math.random() * 100 < 4) ? Math.ceil(Math.random() * 40) : Math.ceil(Math.random() * 13);
       currentSkill.potential = ( (Math.random() * 10) > 9 ) ? 1 : ( ((Math.random() * 10) > 8) ? currentSkill.editors +
       Math.round(Math.random() * 0) : currentSkill.editors / 2 + Math.round(Math.random() * 0) );
-
       currentSkill.forced = (Math.round(Math.random() * 100) > 5) ? 0 : Math.round(Math.random() * 10);
       currentSkill.idle = (Math.round(Math.random() * 100) > 10) ? 0 : Math.round(Math.random() * 10);
       // hours randomizing below
@@ -169,6 +159,83 @@ export class AssemblyTableComponent implements OnInit {
     this.generateRandomEditorDeficiencyBottleneck(this.skills, name);
   }
 
+  getTimeNeededForStep_InSecs(imgCount, rej, ipt, buffer) {
+    const time = imgCount * (1 + rej) * ipt * buffer;
+    return time;
+  }
+
+  getEditorsNeeded(skill, whichCol) {
+    let zeroColCheck = false;
+    if (whichCol === 'zeroHours') {
+      whichCol = 'twoHours';
+      zeroColCheck = true;
+    }
+    const val = skill[whichCol];
+    const timeNeededForOnePe = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer);
+    let editorsNeeded = timeNeededForOnePe /
+      ( this.convertColNameToSecs(whichCol) * (1 - this.unproductiveShiftRatio) );
+    if (zeroColCheck) {
+      editorsNeeded = editorsNeeded * this.zeroHoursColBuffer_forEditorsNeeded;
+    }
+    return parseFloat(editorsNeeded.toFixed(2));
+  }
+
+  convertTimeStringToSeconds(timeString) {
+    if (timeString[0] === '-') {
+      timeString.splice(0, 1);
+    }
+    let time = timeString.split(':');
+    let hh = time[0];
+    let mm = time[1];
+    hh = hh * 60 * 60;
+    mm = mm * 60;
+    time = hh + mm;
+    return time;
+  }
+
+  convertTimeSecondsToString_HHMM(timeSecs) {
+    const hh = Math.floor(timeSecs / 3600);
+    const mm = Math.floor( (timeSecs % 3600) / 60);
+    let hh_str = hh.toString();
+    let mm_str = mm.toString();
+    if (hh < 10) { hh_str = '0' + hh_str; }
+    if (mm < 10) { mm_str = '0' + mm_str; }
+    const timeString = '' + hh_str + ':' + mm_str;
+    return timeString;
+  }
+
+  convertColNameToSecs(colName) {
+    let secs;
+    if (colName === 'zeroHours') {
+      secs = 1;
+    } else if (colName === 'twoHours') {
+      secs = 2 * 60 * 60;
+    } else if (colName === 'fourHours') {
+      secs = 4 * 60 * 60;
+    } else if (colName === 'eightHours') {
+      secs = 8 * 60 * 60;
+    } else if (colName === 'twelveHours') {
+      secs = 12 * 60 * 60;
+    } else if (colName === 'sixteenHours') {
+      secs = 16 * 60 * 60;
+    } else if (colName === 'twentyFourHours') {
+      secs = 24 * 60 * 60;
+    } else if (colName === 'fourtyEightHours') {
+      secs = 48 * 60 * 60;
+    } else if (colName === 'seventyTwoHours') {
+      secs = 72 * 60 * 60;
+    }
+    return secs;
+  }
+
+  startQueue() {
+    const arr: Array<number> = [];
+      for (let i = 0; i < this.skills.length; i++) {
+        arr.push(0);
+      }
+      this.editorsInputArrBool = arr;
+  }
+
   ui_timeStringIsRed(timeString) {
     if (timeString[0] === '-') {
       return true;
@@ -177,9 +244,14 @@ export class AssemblyTableComponent implements OnInit {
     }
   }
 
-  getTimeNeededForStep_InSecs(imgCount, rej, ipt, buffer) {
-    const time = imgCount * (1 + rej) * ipt * buffer;
-    return time;
+  ui_getBottleneckColorForZeroHours(skill) {
+    const val = skill['zeroHours'];
+    if (val > 0) {
+      return {
+        'color': 'red',
+        'fontWeight': 700
+      };
+    }
   }
 
   ui_getBottleneckColor(skill, whichCol) {
@@ -225,16 +297,6 @@ export class AssemblyTableComponent implements OnInit {
       return '';
     }
   }
-  convertTimeSecondsToString_HHMM(timeSecs) {
-    const hh = Math.floor(timeSecs / 3600);
-    const mm = Math.floor( (timeSecs % 3600) / 60);
-    let hh_str = hh.toString();
-    let mm_str = mm.toString();
-    if (hh < 10) { hh_str = '0' + hh_str; }
-    if (mm < 10) { mm_str = '0' + mm_str; }
-    const timeString = '' + hh_str + ':' + mm_str;
-    return timeString;
-  }
 
   ui_convertTimeSecsToTimeFromNow(skill, whichCol) {
     const val = skill[whichCol];
@@ -255,79 +317,13 @@ export class AssemblyTableComponent implements OnInit {
     return '' + skill.editors + ' Editors: ' + result_e;
   }
 
-  convertColNameToSecs(colName) {
-    let secs;
-    if (colName === 'zeroHours') {
-      secs = 1;
-    } else if (colName === 'twoHours') {
-      secs = 2 * 60 * 60;
-    } else if (colName === 'fourHours') {
-      secs = 4 * 60 * 60;
-    } else if (colName === 'eightHours') {
-      secs = 8 * 60 * 60;
-    } else if (colName === 'twelveHours') {
-      secs = 12 * 60 * 60;
-    } else if (colName === 'sixteenHours') {
-      secs = 16 * 60 * 60;
-    } else if (colName === 'twentyFourHours') {
-      secs = 24 * 60 * 60;
-    } else if (colName === 'fourtyEightHours') {
-      secs = 48 * 60 * 60;
-    } else if (colName === 'seventyTwoHours') {
-      secs = 72 * 60 * 60;
-    }
-    return secs;
-  }
-
   ui_getEditorsNeeded(skill, whichCol) {
     const editorsNeeded = this.getEditorsNeeded(skill, whichCol);
     return 'Estimated editors needed: ' + editorsNeeded;
   }
 
-  getEditorsNeeded(skill, whichCol) {
-    let zeroColCheck = false;
-    if (whichCol === 'zeroHours') {
-      whichCol = 'twoHours';
-      zeroColCheck = true;
-    }
-    const val = skill[whichCol];
-    const timeNeededForOnePe = this.getTimeNeededForStep_InSecs(val, skill.avgRej, skill.avgIpt, skill.skillBuffer);
-    let editorsNeeded = timeNeededForOnePe /
-      ( this.convertColNameToSecs(whichCol) * (1 - this.unproductiveShiftRatio) );
-    if (zeroColCheck) {
-      editorsNeeded = editorsNeeded * this.zeroHoursColBuffer_forEditorsNeeded;
-    }
-    return parseFloat(editorsNeeded.toFixed(2));
-  }
-
-  convertTimeStringToSeconds(timeString) {
-    if (timeString[0] === '-') {
-      timeString.splice(0, 1);
-    }
-    let time = timeString.split(':');
-    let hh = time[0];
-    let mm = time[1];
-    hh = hh * 60 * 60;
-    mm = mm * 60;
-    time = hh + mm;
-    return time;
-  }
-
-  editEditors(index) {
+  ui_editEditors(index) {
     this.editorsInputArrBool[index] = 1;
-  }
-
-  saveEditors(index) {
-    this.editorsInputArrBool[index] = 0;
-    console.log('clicked save');
-  }
-
-  ui_startQueue() {
-    const arr: Array<number> = [];
-      for (let i = 0; i < this.skills.length; i++) {
-        arr.push(0);
-      }
-      this.editorsInputArrBool = arr;
   }
 
   ui_resetQueue() {
