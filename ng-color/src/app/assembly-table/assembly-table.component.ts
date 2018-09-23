@@ -9,20 +9,30 @@ import { FormsModule } from '@angular/forms';
 })
 export class AssemblyTableComponent implements OnInit {
   previousGeneratedBottleNeck: Array<string> = [];
-  // skills = this._skills.skills;
-  skills = this.generateRandomEditorDeficiencyBottleneck(this.generateRandomScenario(this._skills.skills));
+  skills; // this is the main variable which holds the ui together
   editorsInputArrBool: Array<number>;
   unproductiveShiftRatio = 1.5 / 8; // (unproductive shift time / shift time)
   zeroHoursColBuffer_forEditorsNeeded = 1.20;
 
+
   // dev configs:
   orangeFormula = false; // dev can config this to true to see orange bottleneck colors, see ui_getBottleneckColor()
   devDebug = false; // shows helpful data on the UI
+  qaGateBool = true;
 
   constructor( private _skills: SkillsService, private _ref: ChangeDetectorRef ) { }
 
   ngOnInit() {
-      this.startQueue();
+    this.setSkillsToRandomScenario();
+    this.ui_startSkillSelectDropdown();
+  }
+
+  setSkillsToRandomScenario() {
+    if (this.qaGateBool) {
+      this._skills.includeQaGates();
+      console.log('Including QA Gates', this._skills.qaGates);
+    }
+    this.skills = this.generateRandomEditorDeficiencyBottleneck(this.generateRandomScenario(this._skills.skills));
   }
 
   generateRandomScenario(skillsArr) {
@@ -154,11 +164,6 @@ export class AssemblyTableComponent implements OnInit {
     this.previousGeneratedBottleNeck.push(skillname);
   }
 
-  genNewBottleneck(name) {
-    console.log('generating bottleneck on: ' + name);
-    this.generateRandomEditorDeficiencyBottleneck(this.skills, name);
-  }
-
   getTimeNeededForStep_InSecs(imgCount, rej, ipt, buffer) {
     const time = imgCount * (1 + rej) * ipt * buffer;
     return time;
@@ -228,7 +233,7 @@ export class AssemblyTableComponent implements OnInit {
     return secs;
   }
 
-  startQueue() {
+  ui_startSkillSelectDropdown() {
     const arr: Array<number> = [];
       for (let i = 0; i < this.skills.length; i++) {
         arr.push(0);
@@ -283,6 +288,11 @@ export class AssemblyTableComponent implements OnInit {
         }
       }
     }
+  }
+
+  ui_genNewBottleneck(name) {
+    console.log('generating bottleneck on: ' + name);
+    this.generateRandomEditorDeficiencyBottleneck(this.skills, name);
   }
 
   ui_getTimeEstForEditors(skill, whichCol) {

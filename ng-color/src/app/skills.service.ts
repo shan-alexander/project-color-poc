@@ -7,7 +7,9 @@ export class SkillsService {
 
   constructor() { }
 
-  skills = [
+  qaGates = [];
+
+  skills: Array<object> = [
     {
       name: 'Background Detection',
       pipeline: 0,
@@ -1803,4 +1805,26 @@ export class SkillsService {
       timeNeededInFutureSteps: 1130, skillBuffer: 1.05
     },
   ];
+
+includeQaGates() {
+    this.generateQaGates();
+    for (let i = 0; i < this.qaGates.length; i++) {
+      this.skills.push(this.qaGates[i]);
+    }
+    return this.skills;
+}
+
+generateQaGates() {
+    const sample = this.skills[0];
+    const sampleKeys = Object.getOwnPropertyNames(sample);
+    for (let i = 0; i < this.skills.length; i++) {
+        const qaGateObj = {};
+        for (let j = 0; j < sampleKeys.length; j++) {
+          qaGateObj[sampleKeys[j]] = this.skills[i][sampleKeys[j]];
+        }
+        qaGateObj['name'] = 'QA Gate - ' + qaGateObj['name'];
+        qaGateObj['qaGate'] = true;
+        this.qaGates.push(qaGateObj);
+    }
+  }
 }

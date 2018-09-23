@@ -15,7 +15,7 @@
             <tr>
                 <td>Generate bottleneck on:&nbsp;&nbsp;</td>
                 <td>
-                  <select (change)="genNewBottleneck($event.target.value)">
+                  <select (change)="ui_genNewBottleneck($event.target.value)">
                     <option default disabled>Select skill</option>
                     <ng-template ngFor let-skill [ngForOf]="skills" let-i="index">
                       <option value="{{skill.name}}">{{skill.name}}</option>
