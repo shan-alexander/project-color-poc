@@ -1824,6 +1824,8 @@ generateQaGates() {
         }
         qaGateObj['name'] = 'QA Gate - ' + qaGateObj['name'];
         qaGateObj['qaGate'] = true;
+        qaGateObj['fKey'] = i;
+        this.skills[i]['pKey'] = i;
         this.qaGates.push(qaGateObj);
     }
   }

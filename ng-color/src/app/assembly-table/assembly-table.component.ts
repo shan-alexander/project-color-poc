@@ -18,7 +18,7 @@ export class AssemblyTableComponent implements OnInit {
   // dev configs:
   orangeFormula = false; // dev can config this to true to see orange bottleneck colors, see ui_getBottleneckColor()
   devDebug = false; // shows helpful data on the UI
-  qaGateBool = true;
+  qaGateBool = false;
 
   constructor( private _skills: SkillsService, private _ref: ChangeDetectorRef ) { }
 
@@ -38,79 +38,100 @@ export class AssemblyTableComponent implements OnInit {
   generateRandomScenario(skillsArr) {
     for (let i = 0; i < skillsArr.length; i++) {
       const currentSkill = skillsArr[i];
-      currentSkill.pipeline = Math.random() * (Math.random() * 1300);
-      currentSkill.notAssigned = currentSkill.pipeline - (currentSkill.pipeline * Math.random()) / 2;
-      currentSkill.assigned = currentSkill.pipeline - (currentSkill.pipeline * Math.random()) / 2;
-      // generate random numbers and conver to strings, ensure formatting
-      let mm: any = Math.round(Math.random() * 60);
-      (mm < 10) ? mm = '0' + mm : mm = '' + mm;
-      currentSkill.longestWaitingTime = '00:' + mm;
-      currentSkill.editors = (Math.random() * 100 < 4) ? Math.ceil(Math.random() * 40) : Math.ceil(Math.random() * 13);
-      currentSkill.potential = ( (Math.random() * 10) > 9 ) ? 1 : ( ((Math.random() * 10) > 8) ? currentSkill.editors +
-      Math.round(Math.random() * 0) : currentSkill.editors / 2 + Math.round(Math.random() * 0) );
-      currentSkill.forced = (Math.round(Math.random() * 100) > 5) ? 0 : Math.round(Math.random() * 10);
-      currentSkill.idle = (Math.round(Math.random() * 100) > 10) ? 0 : Math.round(Math.random() * 10);
-      // hours randomizing below
-      currentSkill.zeroHours = ((Math.random() * 100 > 2) ? 0 : Math.round(Math.random() * 50));
-      currentSkill.twoHours = (Math.random() * 100 > 10) ?
-        currentSkill.zeroHours : (currentSkill.zeroHours + (Math.round(Math.random() * 30)));
-      currentSkill.fourHours = (Math.random() * 100 > 10) ?
-        currentSkill.twoHours : (currentSkill.twoHours + (Math.round(Math.random() * 30)));
-      currentSkill.eightHours = (Math.random() * 100 > 30) ?
-        currentSkill.fourHours : (currentSkill.fourHours + (Math.round(Math.random() * 30)));
-      currentSkill.twelveHours = (Math.random() * 100 > 75) ?
-        currentSkill.eightHours : (currentSkill.eightHours + (Math.round(Math.random() * 150)));
-      currentSkill.sixteenHours = (Math.random() * 100 > 75) ?
-        currentSkill.twelveHours : (currentSkill.twelveHours + (Math.round(Math.random() * 150)));
-      currentSkill.twentyFourHours = (Math.random() * 100 > 50) ?
-        currentSkill.sixteenHours : (currentSkill.sixteenHours + (Math.round(Math.random() * 1000)));
-      currentSkill.fourtyEightHours = (Math.random() * 100 > 50) ?
-        currentSkill.twentyFourHours : (currentSkill.twentyFourHours + (Math.round(Math.random() * 1000)));
-      currentSkill.seventyTwoHours = (Math.random() * 100 > 20) ?
-        currentSkill.fourtyEightHours : (currentSkill.fourtyEightHours + (Math.round(Math.random() * 2000)));
-      if (currentSkill.seventyTwoHours === 0) {currentSkill.seventyTwoHours = Math.round(Math.random() * 500 ); }
-      currentSkill.timeInFutureSteps = 123 * Math.round(Math.random() * 10);
-
-      let lowerBound = null;
-      let upperBound = null;
-
-      if (currentSkill.zeroHours > 0 ) {lowerBound = 0; upperBound = 10; }
-      else if ( currentSkill.twoHours > 0 ) { lowerBound = 0; upperBound = 2; }
-      else if ( currentSkill.fourHours > 0 ) { lowerBound = 2; upperBound = 4; }
-      else if ( currentSkill.eightHours > 0 ) { lowerBound = 4; upperBound = 8; }
-      else if ( currentSkill.twelveHours > 0 ) { lowerBound = 8; upperBound = 12; }
-      else if ( currentSkill.sixteenHours > 0 ) { lowerBound = 12; upperBound = 16; }
-      else if ( currentSkill.twentyFourHours > 0 ) { lowerBound = 16; upperBound = 24; }
-      else if ( currentSkill.fourtyEightHours > 0 ) { lowerBound = 24; upperBound = 48; }
-      else if ( currentSkill.seventyTwoHours > 0 ) { lowerBound = 48; upperBound =  72; }
-
-      let hh: any;
-      hh = Math.round((Math.random() * (upperBound - lowerBound)) + lowerBound);
-      (hh < 10) ? hh = '0' + hh : hh = '' + hh;
-      mm = Math.round(Math.random() * 60);
-      (mm < 10) ? mm = '0' + mm : mm = '' + mm;
-      currentSkill.nextDeadline = '' + hh + ':' + mm;
-      if (currentSkill.zeroHours > 0) {currentSkill.nextDeadline = '-' + currentSkill.nextDeadline; }
-
-      const sortingArraySplit = currentSkill.nextDeadline.split(':');
-      if (sortingArraySplit[0].charAt(0) === '-') {
-        hh = Math.abs(parseInt(sortingArraySplit[0], 10)) + Math.round(Math.abs(parseInt(sortingArraySplit[0], 10)) * Math.random());
-        (hh < 10) ? hh = '0' + hh : hh = '' + hh;
-        hh = '-' + hh;
-        mm = parseInt(sortingArraySplit[1], 10) + Math.round(parseInt(sortingArraySplit[1], 10) * Math.random());
-        if (mm > 60) { mm = 59; }
-        (mm < 10) ? mm = '0' + mm : mm = '' + mm;
+      if (currentSkill['qaGate']) {
+        const currentPrimarySkillOfQaGate = this.getPrimarySkillFromQaGateWithForeignKey(currentSkill.fKey, skillsArr);
+        currentSkill.pipeline = currentPrimarySkillOfQaGate.pipeline;
+        currentSkill.notAssigned = currentPrimarySkillOfQaGate.notAssigned;
+        currentSkill.assigned = currentPrimarySkillOfQaGate.assigned;
+        currentSkill.longestWaitingTime = currentPrimarySkillOfQaGate.longestWaitingTime;
+        currentSkill.editors = currentPrimarySkillOfQaGate.editors;
+        currentSkill.potential = currentPrimarySkillOfQaGate.potential;
+        currentSkill.forced = currentPrimarySkillOfQaGate.forced;
+        currentSkill.idle = currentPrimarySkillOfQaGate.idle;
+        currentSkill.zeroHours = currentPrimarySkillOfQaGate.zeroHours;
+        currentSkill.twoHours = currentPrimarySkillOfQaGate.twoHours;
+        currentSkill.fourHours = currentPrimarySkillOfQaGate.fourHours;
+        currentSkill.eightHours = currentPrimarySkillOfQaGate.eightHours;
+        currentSkill.twelveHours = currentPrimarySkillOfQaGate.twelveHours;
+        currentSkill.sixteenHours = currentPrimarySkillOfQaGate.sixteenHours;
+        currentSkill.twentyFourHours = currentPrimarySkillOfQaGate.twentyFourHours;
+        currentSkill.fourtyEightHours = currentPrimarySkillOfQaGate.fourtyEightHours;
+        currentSkill.seventyTwoHours = currentPrimarySkillOfQaGate.seventyTwoHours;
       } else {
-        hh = parseInt(sortingArraySplit[0], 10) - Math.round(parseInt(sortingArraySplit[0], 10) * Math.random());
-        (hh < 10) ? hh = '0' + hh : hh = '' + hh;
-        mm = parseInt(sortingArraySplit[1], 10) - Math.round(parseInt(sortingArraySplit[1], 10) * Math.random());
+        currentSkill.pipeline = Math.random() * (Math.random() * 1300);
+        currentSkill.notAssigned = currentSkill.pipeline - (currentSkill.pipeline * Math.random()) / 2;
+        currentSkill.assigned = currentSkill.pipeline - (currentSkill.pipeline * Math.random()) / 2;
+        // generate random numbers and conver to strings, ensure formatting
+        let mm: any = Math.round(Math.random() * 60);
         (mm < 10) ? mm = '0' + mm : mm = '' + mm;
-      }
-        currentSkill.sorting = '' + hh + ':' + mm;
-        currentSkill.notAssigned = currentSkill.seventyTwoHours * Math.random() * 0.5;
-        currentSkill.assigned = (Math.random() > 0.9)
-          ? currentSkill.editors * (Math.random() + 1) : currentSkill.editors * ((Math.random() + 1) * 3);
-        currentSkill.pipeline = currentSkill.seventyTwoHours - (currentSkill.notAssigned + currentSkill.assigned);
+        currentSkill.longestWaitingTime = '00:' + mm;
+        currentSkill.editors = (Math.random() * 100 < 4) ? Math.ceil(Math.random() * 40) : Math.ceil(Math.random() * 13);
+        currentSkill.potential = ( (Math.random() * 10) > 9 ) ? currentSkill.editors : ( ((Math.random() * 10) < 8) ? currentSkill.editors +
+        Math.round(Math.random() * 10) : currentSkill.editors + Math.round(Math.random() * 0) );
+        currentSkill.forced = (Math.round(Math.random() * 100) > 5) ? 0 : Math.round(Math.random() * 10);
+        currentSkill.idle = (Math.round(Math.random() * 100) > 10) ? 0 : Math.round(Math.random() * 10);
+        // hours randomizing below
+        currentSkill.zeroHours = ((Math.random() * 100 > 2) ? 0 : Math.round(Math.random() * 50));
+        currentSkill.twoHours = (Math.random() * 100 > 10) ?
+          currentSkill.zeroHours : (currentSkill.zeroHours + (Math.round(Math.random() * 30)));
+        currentSkill.fourHours = (Math.random() * 100 > 10) ?
+          currentSkill.twoHours : (currentSkill.twoHours + (Math.round(Math.random() * 30)));
+        currentSkill.eightHours = (Math.random() * 100 > 30) ?
+          currentSkill.fourHours : (currentSkill.fourHours + (Math.round(Math.random() * 30)));
+        currentSkill.twelveHours = (Math.random() * 100 > 75) ?
+          currentSkill.eightHours : (currentSkill.eightHours + (Math.round(Math.random() * 150)));
+        currentSkill.sixteenHours = (Math.random() * 100 > 75) ?
+          currentSkill.twelveHours : (currentSkill.twelveHours + (Math.round(Math.random() * 150)));
+        currentSkill.twentyFourHours = (Math.random() * 100 > 50) ?
+          currentSkill.sixteenHours : (currentSkill.sixteenHours + (Math.round(Math.random() * 1000)));
+        currentSkill.fourtyEightHours = (Math.random() * 100 > 50) ?
+          currentSkill.twentyFourHours : (currentSkill.twentyFourHours + (Math.round(Math.random() * 1000)));
+        currentSkill.seventyTwoHours = (Math.random() * 100 > 20) ?
+          currentSkill.fourtyEightHours : (currentSkill.fourtyEightHours + (Math.round(Math.random() * 2000)));
+        if (currentSkill.seventyTwoHours === 0) {currentSkill.seventyTwoHours = Math.round(Math.random() * 500 ); }
+        currentSkill.timeInFutureSteps = 123 * Math.round(Math.random() * 10);
+
+        let lowerBound = null;
+        let upperBound = null;
+
+        if (currentSkill.zeroHours > 0 ) {lowerBound = 0; upperBound = 10; }
+        else if ( currentSkill.twoHours > 0 ) { lowerBound = 0; upperBound = 2; }
+        else if ( currentSkill.fourHours > 0 ) { lowerBound = 2; upperBound = 4; }
+        else if ( currentSkill.eightHours > 0 ) { lowerBound = 4; upperBound = 8; }
+        else if ( currentSkill.twelveHours > 0 ) { lowerBound = 8; upperBound = 12; }
+        else if ( currentSkill.sixteenHours > 0 ) { lowerBound = 12; upperBound = 16; }
+        else if ( currentSkill.twentyFourHours > 0 ) { lowerBound = 16; upperBound = 24; }
+        else if ( currentSkill.fourtyEightHours > 0 ) { lowerBound = 24; upperBound = 48; }
+        else if ( currentSkill.seventyTwoHours > 0 ) { lowerBound = 48; upperBound =  72; }
+
+        let hh: any;
+        hh = Math.round((Math.random() * (upperBound - lowerBound)) + lowerBound);
+        (hh < 10) ? hh = '0' + hh : hh = '' + hh;
+        mm = Math.round(Math.random() * 60);
+        (mm < 10) ? mm = '0' + mm : mm = '' + mm;
+        currentSkill.nextDeadline = '' + hh + ':' + mm;
+        if (currentSkill.zeroHours > 0) {currentSkill.nextDeadline = '-' + currentSkill.nextDeadline; }
+
+        const sortingArraySplit = currentSkill.nextDeadline.split(':');
+        if (sortingArraySplit[0].charAt(0) === '-') {
+          hh = Math.abs(parseInt(sortingArraySplit[0], 10)) + Math.round(Math.abs(parseInt(sortingArraySplit[0], 10)) * Math.random());
+          (hh < 10) ? hh = '0' + hh : hh = '' + hh;
+          hh = '-' + hh;
+          mm = parseInt(sortingArraySplit[1], 10) + Math.round(parseInt(sortingArraySplit[1], 10) * Math.random());
+          if (mm > 60) { mm = 59; }
+          (mm < 10) ? mm = '0' + mm : mm = '' + mm;
+        } else {
+          hh = parseInt(sortingArraySplit[0], 10) - Math.round(parseInt(sortingArraySplit[0], 10) * Math.random());
+          (hh < 10) ? hh = '0' + hh : hh = '' + hh;
+          mm = parseInt(sortingArraySplit[1], 10) - Math.round(parseInt(sortingArraySplit[1], 10) * Math.random());
+          (mm < 10) ? mm = '0' + mm : mm = '' + mm;
+        }
+          currentSkill.sorting = '' + hh + ':' + mm;
+          currentSkill.notAssigned = currentSkill.seventyTwoHours * Math.random() * 0.5;
+          currentSkill.assigned = (Math.random() > 0.9)
+            ? currentSkill.editors * (Math.random() + 1) : currentSkill.editors * ((Math.random() + 1) * 3);
+          currentSkill.pipeline = currentSkill.seventyTwoHours - (currentSkill.notAssigned + currentSkill.assigned);
+        }
       }
 
     console.log('Skills array: ', skillsArr);
@@ -162,6 +183,17 @@ export class AssemblyTableComponent implements OnInit {
 
   setPreviousGeneratedBottleNeck(skillname) {
     this.previousGeneratedBottleNeck.push(skillname);
+  }
+
+  getPrimarySkillFromQaGateWithForeignKey(key, arr) {
+    let primarySkill;
+    for ( let i = 0; i < arr.length; i++) {
+      if (arr[i].pKey === key) {
+        primarySkill = arr[i];
+        break;
+      }
+    }
+    return primarySkill;
   }
 
   getTimeNeededForStep_InSecs(imgCount, rej, ipt, buffer) {
